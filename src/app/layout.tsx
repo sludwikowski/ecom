@@ -5,12 +5,14 @@ import { cn } from "@/lib/utils"
 import "../styles/globals.css"
 
 import React from "react"
-import { env } from "@/env"
 
+import { env } from "@/env.mjs"
 import { fontHeading, fontInter } from "@/config/font"
 import { siteConfig } from "@/config/site"
 
 import { Toaster } from "@/components/ui/toaster"
+import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider"
+import { ThemeProvider } from "@/components/providers/theme-provider"
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -70,7 +72,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden overflow-y-scroll">
       <body
         className={cn(
           "size-full bg-background font-sans text-foreground antialiased",
@@ -78,8 +80,16 @@ export default function RootLayout({
           fontHeading.variable
         )}
       >
-        {children}
-        <Toaster />
+        <SmoothScrollProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   )
